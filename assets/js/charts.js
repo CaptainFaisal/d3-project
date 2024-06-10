@@ -23,7 +23,7 @@ window.onload = () => {
     })
     console.log("Scatter Plot");
     d3.csv("assets/datasets/HEALTH_HCQI.csv").then(data => {
-        const chartContainer = document.getElementById("Scatter_Plot");
+        const chartContainer = document.getElementsByClassName("container")[2];
         chartContainer.appendChild(plot(data));
     })
 }

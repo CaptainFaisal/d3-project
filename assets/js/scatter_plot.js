@@ -58,25 +58,6 @@ const plot = (data) => {
         .attr("transform", d => `translate(${x(d["Indicator"])},${y(d["Value"])})`)
         .attr("r", 3);
   
-    // Create the brush behavior.
-    // svg.call(d3.brush().on("start brush end", ({selection}) => {
-    //   let value = [];
-    //   if (selection) {
-    //     const [[x0, y0], [x1, y1]] = selection;
-    //     value = dot
-    //       .style("stroke", "gray")
-    //       .filter(d => x0 <= x(d["Indicator"]) && x(d["Indicator"]) < x1
-    //               && y0 <= y(d["Value"]) && y(d["Value"]) < y1)
-    //       .style("stroke", "steelblue")
-    //       .data();
-    //   } else {
-    //     dot.style("stroke", "steelblue");
-    //   }
-  
-    //   // Inform downstream cells that the selection has changed.
-    //   svg.property("value", value).dispatch("input");
-    // }));
-  
     return svg.node();
   }
 export default plot;
