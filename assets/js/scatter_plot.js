@@ -1,10 +1,4 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-window.onload = () => {
-    const chartContainer = document.getElementById("Scatter_Plot");
-    d3.csv("assets/datasets/HEALTH_HCQI.csv").then(data => {
-        chartContainer.appendChild(plot(data));
-    })
-}
 const plot = (data) => {
 
     // Specify the chart’s dimensions.
@@ -14,13 +8,11 @@ const plot = (data) => {
     const marginRight = 30;
     const marginBottom = 30;
     const marginLeft = 40;
-  
     // Create the horizontal (x) scale, positioning N/A values on the left margin.
-    const x = d3.scaleOrdinal()
-        .domain(data.map(e=>e["Indicator"]))
-        .range([marginLeft, width - marginRight])
-        .unknown(marginLeft);
-  
+    const uniqueIndicators = [...new Set(data.map(d => d["Indicator"]))];
+    const x = d3.scalePoint()
+        .domain(uniqueIndicators)
+        .range([0, uniqueIndicators.length*10])
     // Create the vertical (y) scale, positioning N/A values on the bottom margin.
     const y = d3.scaleLinear()
         .domain([0, d3.max(data, d => d["Value"])]).nice()
@@ -43,7 +35,7 @@ const plot = (data) => {
             .attr("fill", "#000")
             .attr("font-weight", "bold")
             .attr("text-anchor", "end")
-            .text("Miles per Gallon"));
+            .text("Indicators"));
   
     svg.append("g")
         .attr("transform", `translate(${marginLeft},0)`)
@@ -53,7 +45,7 @@ const plot = (data) => {
             .attr("x", 4)
             .attr("text-anchor", "start")
             .attr("font-weight", "bold")
-            .text("Horsepower"));
+            .text("Rates"));
   
     // Append the dots.
     const dot = svg.append("g")
@@ -67,23 +59,24 @@ const plot = (data) => {
         .attr("r", 3);
   
     // Create the brush behavior.
-    svg.call(d3.brush().on("start brush end", ({selection}) => {
-      let value = [];
-      if (selection) {
-        const [[x0, y0], [x1, y1]] = selection;
-        value = dot
-          .style("stroke", "gray")
-          .filter(d => x0 <= x(d["Indicator"]) && x(d["Indicator"]) < x1
-                  && y0 <= y(d["Value"]) && y(d["Value"]) < y1)
-          .style("stroke", "steelblue")
-          .data();
-      } else {
-        dot.style("stroke", "steelblue");
-      }
+    // svg.call(d3.brush().on("start brush end", ({selection}) => {
+    //   let value = [];
+    //   if (selection) {
+    //     const [[x0, y0], [x1, y1]] = selection;
+    //     value = dot
+    //       .style("stroke", "gray")
+    //       .filter(d => x0 <= x(d["Indicator"]) && x(d["Indicator"]) < x1
+    //               && y0 <= y(d["Value"]) && y(d["Value"]) < y1)
+    //       .style("stroke", "steelblue")
+    //       .data();
+    //   } else {
+    //     dot.style("stroke", "steelblue");
+    //   }
   
-      // Inform downstream cells that the selection has changed.
-      svg.property("value", value).dispatch("input");
-    }));
+    //   // Inform downstream cells that the selection has changed.
+    //   svg.property("value", value).dispatch("input");
+    // }));
   
     return svg.node();
   }
+export default plot;

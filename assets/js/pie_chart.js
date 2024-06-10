@@ -1,20 +1,5 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-window.onload = () => {
-
-  d3.csv("assets/datasets/HEALTH_HCQI.csv").then(data => {
-    const iterData = []
-    const chartContainer = document.getElementById("Pie_Chart");
-    data.map(d => {
-      if (iterData.some(e => e.name === d["Indicator"])) {
-        iterData.find(e => e.name === d["Indicator"]).value += 1
-      } else {
-        iterData.push({ name: d["Indicator"], value: 1 })
-      }
-    })
-    chartContainer.appendChild(chart(iterData));
-  })
-}
-const chart = (data) => {
+const pie = (data) => {
   // Specify the chart’s dimensions.
   const width = 928;
   const height = Math.min(width, 500);
@@ -70,8 +55,7 @@ const chart = (data) => {
     .attr("transform", d => `translate(${arcLabel.centroid(d)})`)
     .call(text => text.append("tspan")
       .attr("y", "-0.4em")
-      .attr("font-weight", "bold")
-      .text(d => d.data.name))
+      .attr("font-weight", "bold"))
     .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
       .attr("x", 0)
       .attr("y", "0.7em")
@@ -80,3 +64,4 @@ const chart = (data) => {
 
   return svg.node();
 }
+export default pie;

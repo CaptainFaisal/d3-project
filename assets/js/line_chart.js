@@ -1,13 +1,6 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-window.onload = () => {
 
-    const chartContainer = document.getElementById("Line_Chart");
-    d3.csv("assets/datasets/HEALTH_MORTALITY_CLEANED.csv").then(data => {
-        chartContainer.appendChild(chart(data));
-    })
-}
-
-const chart = (aapl) => {
+const line_chart = (aapl) => {
     // Declare the chart dimensions and margins.
     const width = 928;
     const height = 500;
@@ -63,3 +56,4 @@ const chart = (aapl) => {
 
     return svg.node();
 }
+export default line_chart;
